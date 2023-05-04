@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <stdlib.h>
 
@@ -141,9 +142,11 @@ int main() {
                 floor2[current_index2].business = false;
                 ++current_index2;
               }
-              else if (current_index2 > 10) {
+              //moving to floor3 logic but with economy pricing
+              else if (current_index2 > 10 && current_index3 <= 10) {
+                printf("Initially moved to floor 2\n");
                 printf("Turns out Floor 2 is also full!\n");
-                printf("Moving you to floor 3..."); 
+                printf("Moving you to floor 3...\n\n"); 
 
                 strcpy(floor3[current_index3].first, first);
                 strcpy(floor3[current_index3].last, last);
@@ -151,8 +154,14 @@ int main() {
                 floor3[current_index3].occupancy = occupancy;
                 floor3[current_index3].occupied = true;
                 floor3[current_index3].executive = false;
-                floor3[current_index3].business = true;
+                floor3[current_index3].business = false;
+                floor3[current_index3].economy = true;
                 ++current_index3;
+              }
+
+              else if (current_index3 > 10) {
+                printf("THE HOTEL IS FULL\n\n");
+                printf("You cannot book this room :(\n\n");
               }
             }
             break;
@@ -195,6 +204,22 @@ int main() {
                 floor3[current_index3].executive = false;
                 floor3[current_index3].business = true;
                 ++current_index3;
+              }
+              //moving to floor1 logic but with business rate pricing
+              else if (current_index3 > 10 && current_index1 <= 10) {
+                printf("Initially moved to floor 3\n");
+                printf("Turns out Floor 3 is also full!\n");
+                printf("Moving you to floor 1...\n\n"); 
+
+                strcpy(floor1[current_index1].first, first);
+                strcpy(floor1[current_index1].last, last);
+
+                floor1[current_index1].occupancy = occupancy;
+                floor1[current_index1].occupied = true;
+                floor1[current_index1].executive = false;
+                floor1[current_index1].business = true;
+                floor1[current_index1].economy = false;
+                ++current_index1;
               }
             }
             break;
