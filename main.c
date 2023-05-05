@@ -34,8 +34,8 @@ int main() {
 
   //keeping track of current index per each floor
   int current_index1 = 11;
-  int current_index2 = 11;
-  int current_index3 = 0;
+  int current_index2 = 0;
+  int current_index3 = 11;
 
   //for scanning in occupancy of a room booked
   int occupancy;
@@ -45,7 +45,6 @@ int main() {
   int firstOccupied = 0;
   int secondOccupied = 0;
 
-  
   //counting rooms per floor for calculating rate
   int economy = 0;
   int business = 0; 
@@ -117,6 +116,7 @@ int main() {
             if (scanf("%d", &occupancy) != 1 || occupancy > 4 || occupancy < 0) {
               printf("\n");
               printf("Invalid Input. Enter an occupancy number between 0 and 4 inclusive.\n\n");
+              fflush(stdin);
               break;
             }
             else if (current_index1 <= 10) {
@@ -160,8 +160,8 @@ int main() {
               }
 
               else if (current_index3 > 10) {
-                printf("THE HOTEL IS FULL\n\n");
-                printf("You cannot book this room :(\n\n");
+                printf("\x1b[31m THE HOTEL IS FULL. \x1b[0m  \n");
+                printf("You cannot book any more rooms :(\n\n");
               }
             }
             break;
@@ -179,6 +179,7 @@ int main() {
             if (scanf("%d", &occupancy) != 1 || occupancy > 4 || occupancy < 0) {
               printf("\n");
               printf("Invalid Input. Enter an occupancy number between 0 and 4 inclusive.\n\n");
+              fflush(stdin);
               break;
             }
 
@@ -221,6 +222,10 @@ int main() {
                 floor1[current_index1].economy = false;
                 ++current_index1;
               }
+              else {
+                printf("\x1b[31m THE HOTEL IS FULL. \x1b[0m  \n");
+                printf("You cannot book any more rooms :(\n\n");
+              }
             }
             break;
 
@@ -237,6 +242,7 @@ int main() {
             if (scanf("%d", &occupancy) != 1 || occupancy > 4 || occupancy < 0) {
               printf("\n");
               printf("Invalid Input. Enter an occupancy number between 0 and 4 inclusive.\n\n");
+              fflush(stdin);
               break;
             }
 
@@ -249,8 +255,40 @@ int main() {
             }
             else {
               printf("The rooms on this floor is full!\n");
+
+              if (current_index1 <= 10 && current_index3 > 10) {
+                printf("Moving you to floor 1...\n\n");
+                strcpy(floor1[current_index1].first, first);
+                strcpy(floor1[current_index1].last, last);
+                floor1[current_index1].occupancy = occupancy;
+                floor1[current_index1].occupied = true;
+                floor1[current_index1].economy = false;
+                floor1[current_index1].business = false;
+                floor1[current_index1].executive = true;
+                ++current_index1;
+              }
+
+              else if (current_index1 > 10 && current_index2 <= 10) {
+                //floor 1 is full but floor 2 is open
+                printf("Initially moved to floor1...\n");
+                printf("Turns out floor 1 is also full!\n\n");
+                printf("Moving to floor 2 instead...\n");
+
+                strcpy(floor2[current_index2].first, first);
+                strcpy(floor2[current_index2].last, last);
+                floor2[current_index2].occupancy = occupancy;
+                floor2[current_index2].occupied = true;
+                floor2[current_index2].economy = false;
+                floor2[current_index2].business = false;
+                floor2[current_index2].executive = true;
+                ++current_index2;
+              }
+              else {
+                printf("\x1b[31m THE HOTEL IS FULL. \x1b[0m  \n");
+                printf("You cannot book any more rooms :(\n\n");
+              }
             }
-            break;
+          break;
         }
       }
     }
@@ -504,7 +542,6 @@ int main() {
 
   return 0;
 }
-
 
 void convert(char input[50]) {
 //converts input in all uppercase
