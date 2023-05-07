@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
-#include <sys/wait.h>
-#include <time.h>
 #include <stdlib.h>
 
 #define limit 10
@@ -11,6 +9,7 @@
   struct room {
     int occupancy;
     int age;
+    int id;
 
     char first[40];
     char last[40];
@@ -21,9 +20,8 @@
     bool occupied;
   };
 
+//function prototype for converting commands to uppercase
 void convert(char input[50]);
-void setOccupancy(struct room *floor1[10], struct room *floor2[10], struct room *floor3[10]);
-void printRooms(struct room *floor1[10], struct room *floor2[10], struct room *floor3[10]);
 
 int main() {
 
@@ -84,7 +82,7 @@ int main() {
   for (;;) {
 
     printf("What would you like to do?\n"); 
-    printf("COMMANDS: BOOK, LIST, INCOME, COUNT, READ, WRITE, QUIT, \n");
+    printf("COMMANDS: BOOK, LEAVE, LIST, INCOME, COUNT, READ, WRITE, QUIT, \n");
     printf(">> ");
     scanf("%49s", command);
     convert(command);
@@ -391,9 +389,9 @@ int main() {
           else 
             continue;
         }
-        printf("firstOccupied: %d\n", firstOccupied);
-        printf("secondOccupied: %d\n", secondOccupied);
-        printf("thirdOccupied: %d\n", thirdOccupied);
+        printf("Occupants in First floor: %d\n", firstOccupied);
+        printf("Occupants in Second floor: %d\n", secondOccupied);
+        printf("Occupants in Third floor: %d\n", thirdOccupied);
 
         int totalOccupants = firstOccupied + secondOccupied + thirdOccupied;
         printf("The total occupants in this hotel is: %d\n", totalOccupants);
@@ -526,6 +524,28 @@ int main() {
         printf("Written to file!\n\n");
         fclose(fptr);
     }
+
+    else if (strcmp(command, "READ") == 0) {
+        FILE *fptr;
+        fptr = fopen("output.txt","r");
+
+        if(fptr == NULL) {
+          printf("Error!"); 
+          exit(1); 
+        }
+          
+        printf("Outputted Save File: \n\n");
+
+        do {
+          
+          read = getc(fptr);
+          printf("%c", read);
+                
+        } while (read != EOF);
+
+        fclose(fptr);
+    }
+
     else if (strcmp(command, "QUIT") == 0) {
       printf("Thank you for your time.\n");
 
@@ -548,21 +568,4 @@ void convert(char input[50]) {
   for (int i = 0; i <= strlen(input); ++i) {
       input[i] = toupper(input[i]);
     }
-}
-
-void setOccupancy(struct room *floor1[10], struct room *floor2[10], struct room *floor3[10]) {
-  for (int i = 0; i < 10; ++i) {
-    floor1[i]->occupancy = 0;
-    floor2[i]->occupancy = 0;
-    floor3[i]->occupancy = 0;
-  } 
-}
-
-
-void printRooms(struct room *floor1[10], struct room *floor2[10], struct room *floor3[10]) {
-  for (int i = 0; i < 10; ++i) {
-    floor1[i]->occupied = false;
-    floor2[i]->occupied = false;
-    floor3[i]->occupied = false;
-  }
 }
