@@ -3,6 +3,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <unistd.h>
+#pragma diag_suppress 50
+#pragma diag_suppress 76
+#pragma diag_suppress 9
+#pragma diag_suppress 18
+#pragma diag_suppress 7
 
 #define limit 10
 
@@ -22,6 +28,7 @@
 
 //function prototype for converting commands to uppercase
 void convert(char input[50]);
+void arcade();
 
 int main() {
 
@@ -31,12 +38,15 @@ int main() {
   int floor;
 
   //keeping track of current index per each floor
-  int current_index1 = 11;
+  int current_index1 = 0;
   int current_index2 = 0;
-  int current_index3 = 11;
+  int current_index3 = 0;
 
   //for scanning in occupancy of a room booked
   int occupancy;
+  
+  //for taking in guest age
+  int age;
 
   //counting specific room occupancy
   int thirdOccupied = 0;
@@ -82,11 +92,14 @@ int main() {
   for (;;) {
 
     printf("What would you like to do?\n"); 
-    printf("COMMANDS: BOOK, LEAVE, LIST, INCOME, COUNT, READ, WRITE, QUIT, \n");
+    printf("COMMANDS: BOOK, LEAVE, LIST, INCOME, COUNT, READ, WRITE, ARCADE, QUIT, \n");
     printf(">> ");
     scanf("%49s", command);
     convert(command);
 
+    if (strcmp(command, "ARCADE") == 0) {
+      arcade();
+    }
     if (strcmp(command, "BOOK") == 0) {
       printf("Which floor would you like?\n");
       printf(">> ");
@@ -110,6 +123,15 @@ int main() {
             fflush(stdin);
             printf("\n");
 
+            printf("Enter your age: ");
+            if (scanf("%d", &age) != 1 || age < 21) {
+              printf("Invalid or too low of an age\n\n");
+              //break out
+              break;
+            }
+            fflush(stdin);
+            printf("\n");
+
             printf("Enter the number of occupancies: ");
             if (scanf("%d", &occupancy) != 1 || occupancy > 4 || occupancy < 0) {
               printf("\n");
@@ -122,6 +144,8 @@ int main() {
               strcpy(floor1[current_index1].last, last);
               floor1[current_index1].occupancy = occupancy;
               floor1[current_index1].occupied = true;
+              floor1[current_index1].id = current_index1 + 1;
+              floor1[current_index1].age = age;
               ++current_index1;
             }
 
@@ -138,6 +162,8 @@ int main() {
                 floor2[current_index2].occupied = true;
                 floor2[current_index2].economy = true;
                 floor2[current_index2].business = false;
+                floor2[current_index2].id = current_index2 + 1;
+                floor2[current_index2].age = age;
                 ++current_index2;
               }
               //moving to floor3 logic but with economy pricing
@@ -154,6 +180,8 @@ int main() {
                 floor3[current_index3].executive = false;
                 floor3[current_index3].business = false;
                 floor3[current_index3].economy = true;
+                floor3[current_index3].id = current_index3 + 1;
+                floor3[current_index3].age = age;
                 ++current_index3;
               }
 
@@ -173,6 +201,15 @@ int main() {
             scanf("%39s", last);
             printf("\n");
 
+            printf("Enter your age: "); 
+            if (scanf("%d", &age) != 1 || age < 21) {
+              printf("Invalid or too low of an age\n\n");
+              //break out
+              break;
+            }
+            fflush(stdin);
+            printf("\n");
+
             printf("Enter the number of occupancies: "); 
             if (scanf("%d", &occupancy) != 1 || occupancy > 4 || occupancy < 0) {
               printf("\n");
@@ -186,6 +223,8 @@ int main() {
               strcpy(floor2[current_index2].last, last);
               floor2[current_index2].occupancy = occupancy;
               floor2[current_index2].occupied = true;
+              floor2[current_index2].id = current_index2 + 1;
+              floor2[current_index2].age = age;
               ++current_index2;
             }
             else {
@@ -202,6 +241,8 @@ int main() {
                 floor3[current_index3].occupied = true;
                 floor3[current_index3].executive = false;
                 floor3[current_index3].business = true;
+                floor3[current_index3].id = current_index3 + 1;
+                floor3[current_index3].age = age;
                 ++current_index3;
               }
               //moving to floor1 logic but with business rate pricing
@@ -218,6 +259,8 @@ int main() {
                 floor1[current_index1].executive = false;
                 floor1[current_index1].business = true;
                 floor1[current_index1].economy = false;
+                floor1[current_index1].id = current_index1 + 1;
+                floor1[current_index1].age = age;
                 ++current_index1;
               }
               else {
@@ -236,6 +279,15 @@ int main() {
             scanf("%39s", last);
             printf("\n");
 
+            printf("Enter your age: "); 
+            if (scanf("%d", &age) != 1 || age < 21) {
+              printf("Invalid or too low of an age\n\n");
+              //break out
+              break;
+            }
+            fflush(stdin);
+            printf("\n");
+
             printf("Enter the number of occupancies: ");
             if (scanf("%d", &occupancy) != 1 || occupancy > 4 || occupancy < 0) {
               printf("\n");
@@ -249,6 +301,8 @@ int main() {
               strcpy(floor3[current_index3].last, last);
               floor3[current_index3].occupancy = occupancy;
               floor3[current_index3].occupied = true;
+              floor3[current_index3].id = current_index3 + 1;
+              floor3[current_index3].age = age;
               ++current_index3;
             }
             else {
@@ -263,6 +317,8 @@ int main() {
                 floor1[current_index1].economy = false;
                 floor1[current_index1].business = false;
                 floor1[current_index1].executive = true;
+                floor1[current_index1].id = current_index1 + 1;
+                floor1[current_index3].age = age;
                 ++current_index1;
               }
 
@@ -279,6 +335,8 @@ int main() {
                 floor2[current_index2].economy = false;
                 floor2[current_index2].business = false;
                 floor2[current_index2].executive = true;
+                floor2[current_index2].id = current_index2 + 1;
+                floor2[current_index3].age = age;
                 ++current_index2;
               }
               else {
@@ -289,6 +347,35 @@ int main() {
           break;
         }
       }
+    }
+
+    else if (strcmp(command, "LEAVE") == 0) {
+      char last[50];
+      int id;
+
+      printf("Enter the last name of the person your room is tied to: ");
+      if (scanf("%49s", last) != 1) {
+        printf("Invalid input for last name\n\n");
+      }
+      printf("Enter the room number: ");
+      if (scanf("%d", &id) != 1) {
+        printf("Invalid input for room number\n\n");
+      }
+
+      for (int i = 0; i < limit; ++i) { 
+        if (strcmp(floor1[i].last, last) == 0 && floor1[i].id == id) {
+          floor1[i].occupied = false;
+        }
+
+        else if (strcmp(floor2[i].last, last) == 0 && floor2[i].id == id) {
+          floor2[i].occupied = false;
+        }
+
+        else if (strcmp(floor3[i].last, last) == 0 && floor3[i].id == id) {
+          floor3[i].occupied = false;
+        }
+      }
+      printf("You checked out!\n\n");
     }
 
     else if (strcmp(command, "LIST") == 0) {
@@ -311,7 +398,10 @@ int main() {
             printf("\n");
             printf("# OF OCCUPANTS: %d", floor1[i].occupancy);
             printf("\n");
+            printf("Age: %d", floor1[i].age);
             printf("\n");
+            printf("ROOM #: %d", floor1[i].id);
+            printf("\n\n"); 
           }
           else {
             continue;
@@ -332,8 +422,10 @@ int main() {
             printf("LAST NAME: %s", floor2[i].last);
             printf("\n");
             printf("# OF OCCUPANTS: %d", floor2[i].occupancy);
+            printf("Age: %d", floor2[i].age);
             printf("\n");
-            printf("\n");
+            printf("ROOM #: %d", floor2[i].id);
+            printf("\n\n"); 
           }
           else {
             continue;
@@ -354,7 +446,10 @@ int main() {
             printf("\n");
             printf("# OF OCCUPANTS: %d", floor3[i].occupancy);
             printf("\n");
+            printf("Age: %d", floor3[i].age);
             printf("\n");
+            printf("ROOM #: %d", floor3[i].id);
+            printf("\n\n"); 
           }
           else {
             continue;
@@ -466,7 +561,6 @@ int main() {
     }
 
     else if (strcmp(command, "WRITE") == 0) {
-
         //FILE
         FILE *fptr;
         fptr = fopen("output.txt","w");
@@ -486,7 +580,10 @@ int main() {
               fprintf(fptr, "\n");
               fprintf(fptr, "# OF OCCUPANTS: %d", floor1[i].occupancy);
               fprintf(fptr, "\n");
+              fprintf(fptr, "AGE: %d", floor1[i].age);
               fprintf(fptr, "\n");
+              fprintf(fptr, "ROOM #: %d", floor1[i].id);
+              fprintf(fptr, "\n\n");
             }
             else {
               continue;
@@ -500,7 +597,10 @@ int main() {
               fprintf(fptr, "\n");
               fprintf(fptr, "# OF OCCUPANTS: %d", floor2[i].occupancy);
               fprintf(fptr, "\n");
+              fprintf(fptr, "AGE: %d", floor2[i].age);
               fprintf(fptr, "\n");
+              fprintf(fptr, "ROOM #: %d", floor2[i].id);
+              fprintf(fptr, "\n\n");
             }
             else {
               continue;
@@ -514,7 +614,10 @@ int main() {
               fprintf(fptr, "\n");
               fprintf(fptr, "# OF OCCUPANTS: %d", floor3[i].occupancy);
               fprintf(fptr, "\n");
+              fprintf(fptr, "AGE: %d", floor3[i].age);
               fprintf(fptr, "\n");
+              fprintf(fptr, "ROOM #: %d", floor3[i].id);
+              fprintf(fptr, "\n\n");
             }
             else {
               continue;
@@ -568,4 +671,65 @@ void convert(char input[50]) {
   for (int i = 0; i <= strlen(input); ++i) {
       input[i] = toupper(input[i]);
     }
+}
+
+void donut() {
+
+#define R(mul,shift,x,y) \
+  _=x; \
+  x -= mul*y>>shift; \
+  y += mul*_>>shift; \
+  _ = 3145728-x*x-y*y>>11; \
+  x = x*_>>10; \
+  y = y*_>>10;
+
+  int8_t b[1760], z[1760];
+
+  int sA=2024,cA=0,sB=2024,cB=0,_;
+  for (;;) {
+
+    printf("ITS A SPINNING DONUT: \n\n");
+
+    memset(b, 32, 1760);  // text buffer
+    memset(z, 127, 1760);   // z buffer
+    int sj=0, cj=1024;
+    for (int j = 0; j < 90; j++) {
+      int si = 0, ci = 1024;  // sine and cosine of angle i
+      for (int i = 0; i < 324; i++) {
+        int R1 = 1, R2 = 2048, K2 = 5120*1024;
+
+        int x0 = R1*cj + R2,
+            x1 = ci*x0 >> 10,
+            x2 = cA*sj >> 10,
+            x3 = si*x0 >> 10,
+            x4 = R1*x2 - (sA*x3 >> 10),
+            x5 = sA*sj >> 10,
+            x6 = K2 + R1*1024*x5 + cA*x3,
+            x7 = cj*si >> 10,
+            x = 40 + 30*(cB*x1 - sB*x4)/x6,
+            y = 12 + 15*(cB*x4 + sB*x1)/x6,
+            N = (-cA*x7 - cB*((-sA*x7>>10) + x2) - ci*(cj*sB >> 10) >> 10) - x5 >> 7;
+
+        int o = x + 80 * y;
+        int8_t zz = (x6-K2)>>15;
+        if (22 > y && y > 0 && x > 0 && 80 > x && zz < z[o]) {
+          z[o] = zz;
+          //the ascii marks
+          b[o] = ".,-~:;=!*#$@"[N > 0 ? N : 0];
+        }
+        R(5, 8, ci, si)  // rotate i
+      }
+      R(9, 7, cj, sj)  // rotate j
+    }
+    for (int k = 0; 1761 > k; k++)
+      putchar(k % 80 ? b[k] : 10);
+    R(5, 7, cA, sA);
+    R(5, 8, cB, sB);
+    usleep(15000);
+    printf("\x1b[23A");
+  }
+}
+
+void arcade() {
+  donut();
 }
